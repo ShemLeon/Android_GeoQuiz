@@ -26,7 +26,8 @@ public class QuizActivity extends AppCompatActivity {
     private FirebaseDatabase database;
     private DatabaseReference dbReference;
     private String currentRightAnswer;
-    private int currentQuestion = 1, currentScore = 0;
+    private int currentQuestion = 1;
+    private int currentScore = 0;
     private boolean wasHintRequested = false;
     private RadioButton selectedRadioButton;
     private int selectedRadioButtonId = -1;
@@ -139,7 +140,6 @@ public class QuizActivity extends AppCompatActivity {
             Toast.makeText(QuizActivity.this, "Firstly choose the answer", Toast.LENGTH_SHORT).show();
             return;
         }
-
         // Получаем текст выбранного RadioButton
         String choosedAnswer = ((RadioButton) findViewById(selectedRadioButtonId)).getText().toString();
 
@@ -150,5 +150,6 @@ public class QuizActivity extends AppCompatActivity {
             currentScore += 1;
 
         Toast.makeText(QuizActivity.this, "Right answer " + currentRightAnswer, Toast.LENGTH_SHORT).show();
+        currentQuestion++;
     }
 }
