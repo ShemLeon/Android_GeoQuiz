@@ -19,6 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 
 public class QuizActivity extends AppCompatActivity {
     private ActivityQuizBinding binding;
@@ -45,8 +46,9 @@ public class QuizActivity extends AppCompatActivity {
         });
 
         database = FirebaseDatabase.getInstance();
-        // dbReference = database.getReference("Questions");
+        //здесь добавить логику с режимами игры, интент после ChooseActivity
         dbReference = database.getReference("Questions").child("Type_game").child("Easy");
+
         dbReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -81,7 +83,7 @@ public class QuizActivity extends AppCompatActivity {
          */
         String pictureUrl = snapshot.child("picture").getValue().toString();
         String question = snapshot.child("question").getValue().toString();
-        currentRightAnswer = snapshot.child("answer").getValue().toString();
+        currentRightAnswer = snapshot.child("right").getValue().toString();
 
         List<String> questionAnswers = new ArrayList<>();
 
@@ -89,29 +91,37 @@ public class QuizActivity extends AppCompatActivity {
             String answer = answerSnapShot.getValue().toString();
             questionAnswers.add(answer);
         }
-
+        // Glide - фича для преобразования ссылки в картинку на телефон.
         Glide.with(QuizActivity.this).load(pictureUrl).into(binding.ivQuestion);
         binding.tvQuestion.setText(question);
         fillAnswerOptions(questionAnswers);
     }
 
     private void fillAnswerOptions(List<String> answerOptions) {
+        // Заполнение XML данными из фаербейса
         if (answerOptions.size() < 6) {
             Toast.makeText(QuizActivity.this, "Not enough answer options", Toast.LENGTH_LONG).show();
             return;
         }
+        // Создаем список индексов от 0 до 5 для рандомизации ответов
+        List<Integer> indices = new ArrayList<>();
+        for (int i = 0; i < 6; i++) {
+            indices.add(i);
+        }
+        // Перемешиваем индексы случайным образом
+        Collections.shuffle(indices);
+        // Устанавливаем текст для радиокнопок, используя случайные индексы
+        binding.radioAns1.setText(answerOptions.get(indices.get(0)));
+        binding.radioAns2.setText(answerOptions.get(indices.get(1)));
+        binding.radioAns3.setText(answerOptions.get(indices.get(2)));
+        binding.radioAns4.setText(answerOptions.get(indices.get(3)));
+        binding.radioAns5.setText(answerOptions.get(indices.get(4)));
+        binding.radioAns6.setText(answerOptions.get(indices.get(5)));
 
-        binding.radioAns1.setText(answerOptions.get(0));
-        binding.radioAns2.setText(answerOptions.get(1));
-        binding.radioAns3.setText(answerOptions.get(2));
-        binding.radioAns4.setText(answerOptions.get(3));
-        binding.radioAns5.setText(answerOptions.get(4));
-        binding.radioAns6.setText(answerOptions.get(5));
     }
 
     private void onRadioButtonClicked(View view) {
         RadioButton radioButton = (RadioButton) view;
-
         // Снимаем выбор с предыдущего выбранного RadioButton, если он есть
         if (selectedRadioButton != null) {
             selectedRadioButton.setChecked(false);
