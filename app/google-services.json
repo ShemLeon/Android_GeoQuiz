@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "870099045253",
+    "firebase_url": "https://geobase-52793-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "geobase-52793",
+    "storage_bucket": "geobase-52793.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:870099045253:android:eb81f381114c258b3392ec",
+        "android_client_info": {
+          "package_name": "com.example.geoquiz"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkwFd77049wAvvW5oxateLkjAmhUtJBUA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">GeoQuiz</string>
+    <string name="username">Username</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Log in</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="to_register">Create account</string>
+    <string name="choose_mode">Choose game mode</string>
+    <string name="apply">Apply</string>
+</resources>
