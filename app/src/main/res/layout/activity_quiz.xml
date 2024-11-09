@@ -62,7 +62,7 @@
             style="@style/RadioButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Lebanon"
+            tools:text="Answer 1"
             android:gravity="start|center_vertical"
             app:layout_row="0"
             app:layout_column="0" />
@@ -72,7 +72,7 @@
             style="@style/RadioButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Israel"
+            tools:text="Answer 2"
             android:gravity="start|center_vertical"
             app:layout_row="0"
             app:layout_column="1" />
@@ -82,7 +82,7 @@
             style="@style/RadioButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Egypt"
+            tools:text="Answer 3"
             android:gravity="start|center_vertical"
             app:layout_row="1"
             app:layout_column="0" />
@@ -92,7 +92,7 @@
             style="@style/RadioButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="USA"
+            tools:text="Answer 4"
             android:gravity="start|center_vertical"
             app:layout_row="1"
             app:layout_column="1" />
@@ -102,7 +102,7 @@
             style="@style/RadioButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Algeria"
+            tools:text="Answer 5"
 
             android:gravity="start|center_vertical"
             app:layout_row="2"
@@ -113,7 +113,7 @@
             style="@style/RadioButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Morocco"
+            tools:text="Answer 6"
 
             android:gravity="start|center_vertical"
             app:layout_row="2"
