@@ -4,14 +4,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.Toast;
-
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
 import com.bumptech.glide.Glide;
 import com.example.geoquiz.databinding.ActivityQuizBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -19,7 +17,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +45,7 @@ public class QuizActivity extends AppCompatActivity {
         });
 
         database = FirebaseDatabase.getInstance();
-        dbReference = database.getReference("Questions");
+        // dbReference = database.getReference("Questions");
 
         dbReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
@@ -79,6 +76,9 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void processDataSnapshot(DataSnapshot snapshot) {
+        /**
+         * Загрузка и установка контента из фаербейса
+         */
         String pictureUrl = snapshot.child("picture").getValue().toString();
         String question = snapshot.child("question").getValue().toString();
         currentRightAnswer = snapshot.child("answer").getValue().toString();
