@@ -46,7 +46,7 @@ public class QuizActivity extends AppCompatActivity {
 
         database = FirebaseDatabase.getInstance();
         // dbReference = database.getReference("Questions");
-
+        dbReference = database.getReference("Questions").child("Type_game").child("Easy");
         dbReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {

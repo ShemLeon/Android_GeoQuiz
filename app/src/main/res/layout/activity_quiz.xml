@@ -65,7 +65,8 @@
             tools:text="Answer 1"
             android:gravity="start|center_vertical"
             app:layout_row="0"
-            app:layout_column="0" />
+            app:layout_column="0"
+            android:layout_marginEnd="15dp"/>
 
         <RadioButton
             android:id="@+id/radio_ans_2"
@@ -75,7 +76,8 @@
             tools:text="Answer 2"
             android:gravity="start|center_vertical"
             app:layout_row="0"
-            app:layout_column="1" />
+            app:layout_column="1"
+            android:layout_marginEnd="15dp"/>
 
         <RadioButton
             android:id="@+id/radio_ans_3"
@@ -85,7 +87,8 @@
             tools:text="Answer 3"
             android:gravity="start|center_vertical"
             app:layout_row="1"
-            app:layout_column="0" />
+            app:layout_column="0"
+            android:layout_marginEnd="15dp"/>
 
         <RadioButton
             android:id="@+id/radio_ans_4"
