@@ -1,7 +1,7 @@
 package com.example.geoquiz;
 
 import android.os.Bundle;
-import android.util.Log;
+
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.Toast;
@@ -21,10 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
-import androidx.core.content.ContextCompat;
+
 
 
 public class QuizActivity extends AppCompatActivity {
@@ -75,8 +72,7 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void loadCurrentQuestion(){
-        clearSelection(); // Сброс выбора перед загрузкой нового вопроса
-
+        clearSelection(); // Сброс выбора RadioButton перед загрузкой нового вопроса
 
         dbReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
@@ -99,7 +95,6 @@ public class QuizActivity extends AppCompatActivity {
         String pictureUrl = snapshot.child("picture").getValue() != null ? snapshot.child("picture").getValue().toString() : "";
         String question = snapshot.child("question").getValue() != null ? snapshot.child("question").getValue().toString() : "";
         currentRightAnswer = snapshot.child("right").getValue() != null ? snapshot.child("right").getValue().toString() : "";
-
 
         List<String> questionAnswers = new ArrayList<>();
 
@@ -146,7 +141,14 @@ public class QuizActivity extends AppCompatActivity {
         radioButton.setChecked(true);
     }
     private void processApplyButtonClick() {
-
+        /*
+         * Функция описывает собития после нажатия основной кнопки:
+        * 1. Очистка выбора RadioButton
+        * 2. Проверка ответа с правильным
+        * 3. Начисление и отображение баллов в Score
+        * 4. Тост с правильным ответом в случае ошибки.
+        * 5. переключение на следующий вопрос
+        */
         // Проверяем, выбран ли вообще какой-то RadioButton
         if (selectedRadioButtonId == -1) {
             Toast.makeText(QuizActivity.this, "Firstly choose the answer", Toast.LENGTH_SHORT).show();
@@ -156,14 +158,16 @@ public class QuizActivity extends AppCompatActivity {
         String chosenAnswer = ((RadioButton) findViewById(selectedRadioButtonId)).getText().toString();
 
         // Проверяем ответ
-        if (chosenAnswer.equals(currentRightAnswer) && !wasHintRequested)
+        if (chosenAnswer.equals(currentRightAnswer) && !wasHintRequested) {
             currentScore += 2;
-        else if (chosenAnswer.equals(currentRightAnswer))
+        }else if (chosenAnswer.equals(currentRightAnswer)) {
             currentScore += 1;
+        } else {
+            Toast.makeText(QuizActivity.this, "Right answer " + currentRightAnswer, Toast.LENGTH_SHORT).show();
+        }
+
         // Установка текста в поле Score:
         binding.tvScore.setText("Score: " + currentScore);
-
-        Toast.makeText(QuizActivity.this, "Right answer " + currentRightAnswer, Toast.LENGTH_SHORT).show();
 
         //переключение на следующий вопрос
         currentQuestion++;
