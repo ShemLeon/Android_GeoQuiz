@@ -8,4 +8,6 @@
     <string name="to_register">Create account</string>
     <string name="choose_mode">Choose game mode</string>
     <string name="apply">Apply</string>
+    <string name="score">Score: 0</string>
+    <string name="score_text">Score: %1$d</string>
 </resources>

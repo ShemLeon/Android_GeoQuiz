@@ -127,7 +127,6 @@ public class QuizActivity extends AppCompatActivity {
         if (selectedRadioButton != null) {
             selectedRadioButton.setChecked(false);
         }
-
         // Устанавливаем новый выбранный RadioButton и его id
         selectedRadioButton = radioButton;
         selectedRadioButtonId = radioButton.getId();
@@ -135,21 +134,24 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void processApplyButtonClick() {
-        // Проверяем, выбран ли какой-то RadioButton
+        // Проверяем, выбран ли вообще какой-то RadioButton
         if (selectedRadioButtonId == -1) {
             Toast.makeText(QuizActivity.this, "Firstly choose the answer", Toast.LENGTH_SHORT).show();
             return;
         }
         // Получаем текст выбранного RadioButton
-        String choosedAnswer = ((RadioButton) findViewById(selectedRadioButtonId)).getText().toString();
+        String chosenAnswer = ((RadioButton) findViewById(selectedRadioButtonId)).getText().toString();
 
         // Проверяем ответ
-        if (choosedAnswer.equals(currentRightAnswer) && !wasHintRequested)
+        if (chosenAnswer.equals(currentRightAnswer) && !wasHintRequested)
             currentScore += 2;
-        else if (choosedAnswer.equals(currentRightAnswer))
+        else if (chosenAnswer.equals(currentRightAnswer))
             currentScore += 1;
+        // Установка текста в поле Score:
+        binding.tvScore.setText(getString(R.string.score_text, currentScore));
+
 
         Toast.makeText(QuizActivity.this, "Right answer " + currentRightAnswer, Toast.LENGTH_SHORT).show();
-        currentQuestion++;
+        // currentQuestion++;
     }
 }
