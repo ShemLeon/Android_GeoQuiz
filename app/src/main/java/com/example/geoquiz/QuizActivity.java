@@ -1,7 +1,7 @@
 package com.example.geoquiz;
 
+import android.content.Intent;
 import android.os.Bundle;
-
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.Toast;
@@ -28,11 +28,11 @@ public class QuizActivity extends AppCompatActivity {
     private ActivityQuizBinding binding;
     private FirebaseDatabase database;
     private DatabaseReference dbReference;
+    private RadioButton selectedRadioButton;
     private String currentRightAnswer;
     private int currentQuestion = 1;
     private int currentScore = 0;
     private boolean wasHintRequested = false;
-    private RadioButton selectedRadioButton;
     private int selectedRadioButtonId = -1;
 
     @Override
@@ -40,8 +40,13 @@ public class QuizActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
 
+        // Используем DataBinding для инициализации
         binding = ActivityQuizBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        // Получение режима игры из Intent
+        String gameType = getIntent().getStringExtra("selected_game_type");
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -51,9 +56,22 @@ public class QuizActivity extends AppCompatActivity {
 
         database = FirebaseDatabase.getInstance();
         //здесь добавить логику с режимами игры, интент после ChooseActivity
-        dbReference = database.getReference("Questions").child("Type_game").child("Easy");
+
+        if ("Easy".equals(gameType)) {
+            dbReference = database.getReference("Questions").child("Type_game").child("Easy");
+        } else if ("Hard".equals(gameType)) {
+            dbReference = database.getReference("Questions").child("Type_game").child("Hard");
+        } else if ("Nightmare".equals(gameType)) {
+            dbReference = database.getReference("Questions").child("Type_game").child("Nightmare");
+        } else {
+            // Обработка случая, если режим не распознан
+            Toast.makeText(this, "Неизвестный режим игры", Toast.LENGTH_SHORT).show();
+            finish(); // Возврат к предыдущему экрану, если режим не распознан
+            return;
+        }
 
         loadCurrentQuestion();
+
         // Устанавливаем слушатели для RadioButton
         binding.radioAns1.setOnClickListener(this::onRadioButtonClicked);
         binding.radioAns2.setOnClickListener(this::onRadioButtonClicked);
@@ -69,16 +87,54 @@ public class QuizActivity extends AppCompatActivity {
             }
         });
 
-    }
+        // Добавляем обработчик для кнопки "Finish"
+        binding.btnFinish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finishQuiz();
+            }
+        });
 
+        // Добавляем обработчик для кнопки "Hint"
+        binding.btnHint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showHint();
+            }
+        });
+    }
+    private void showHint() {
+        dbReference.child(Integer.toString(currentQuestion)).child("hint").get()
+                .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            String hint = task.getResult().getValue(String.class);
+                            if (hint != null && !hint.isEmpty()) {
+                                Toast.makeText(QuizActivity.this, " " + hint, Toast.LENGTH_LONG).show();
+                                wasHintRequested = true; // Устанавливаем флаг, если использован hint
+                            } else {
+                                Toast.makeText(QuizActivity.this, "No hint available for this question.", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(QuizActivity.this, "Failed to load hint.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+    private void finishQuiz() {
+        Intent intent = new Intent(QuizActivity.this, FinishActivity.class);
+        intent.putExtra("SCORE", currentScore);
+        startActivity(intent);
+    }
     private void loadCurrentQuestion(){
         clearSelection(); // Сброс выбора RadioButton перед загрузкой нового вопроса
 
-        dbReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        dbReference.child(Integer.toString(currentQuestion)).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()){
-                    DataSnapshot snapshot = task.getResult().child(Integer.toString(currentQuestion));
+                    DataSnapshot snapshot = task.getResult();
                     processDataSnapshot(snapshot);
                 } else {
                     throw new RuntimeException(task.getException().getMessage());
@@ -146,8 +202,7 @@ public class QuizActivity extends AppCompatActivity {
         * 1. Очистка выбора RadioButton
         * 2. Проверка ответа с правильным
         * 3. Начисление и отображение баллов в Score
-        * 4. Тост с правильным ответом в случае ошибки.
-        * 5. переключение на следующий вопрос
+        * 4. переключение на следующий вопрос
         */
         // Проверяем, выбран ли вообще какой-то RadioButton
         if (selectedRadioButtonId == -1) {
@@ -162,8 +217,6 @@ public class QuizActivity extends AppCompatActivity {
             currentScore += 2;
         }else if (chosenAnswer.equals(currentRightAnswer)) {
             currentScore += 1;
-        } else {
-            Toast.makeText(QuizActivity.this, "Right answer " + currentRightAnswer, Toast.LENGTH_SHORT).show();
         }
 
         // Установка текста в поле Score:

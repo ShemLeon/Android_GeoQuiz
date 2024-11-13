@@ -17,6 +17,11 @@ import java.util.List;
 // Адаптер класс - мост между Data (List<TypeGame>) и RecyclerView + CardView
 public class ChooseViewAdapter extends RecyclerView.Adapter<ChooseViewHolder> {
     private List<TypeGame> typeGameList;
+    public TypeGameClickListener clickListener;
+    public void  setClickListener(TypeGameClickListener myListener){
+        this.clickListener = myListener;
+    }
+
 
     public ChooseViewAdapter(List<TypeGame> typeGameList) {
         this.typeGameList = typeGameList;
@@ -40,17 +45,12 @@ public class ChooseViewAdapter extends RecyclerView.Adapter<ChooseViewHolder> {
         holder.tvTypeGameName.setText(currentTypeGame.getTypeGameName());
         holder.ivCard.setImageResource(currentTypeGame.getTypeGameImg());
 
-        /*
-        String imgUrlEasy = "https://firebasestorage.googleapis.com/v0/b/geobase-52793.appspot.com/o/RecyclerView%2Fcard_easy.jpg?alt=media&token=682c4c15-52c3-4ef0-97d5-8f45bfe015f7";
-        String imgUrlHard = "https://firebasestorage.googleapis.com/v0/b/geobase-52793.appspot.com/o/RecyclerView%2Fcard_hard.jpg?alt=media&token=dbc84044-7065-4c43-990c-a2d6ceff972e";
-        String imgUrNightmare = "https://firebasestorage.googleapis.com/v0/b/geobase-52793.appspot.com/o/RecyclerView%2Fcard_nigthmare.jpg?alt=media&token=0a1f892a-244e-4e6a-be0d-8bf7e4134411";
-        String imgUrlClothing = "https://firebasestorage.googleapis.com/v0/b/geobase-52793.appspot.com/o/RecyclerView%2Fcard_clothing.jpg?alt=media&token=6bc2f1bf-a9c4-465c-b9e4-e213fedfcea8";
-        String imgUrlHistory = "https://firebasestorage.googleapis.com/v0/b/geobase-52793.appspot.com/o/RecyclerView%2Fcard_history.jpg?alt=media&token=15a20aa7-f03c-439b-9337-f243904c9c9e";
-        String imgUrlSport = "https://firebasestorage.googleapis.com/v0/b/geobase-52793.appspot.com/o/RecyclerView%2Fcard_sport.jpg?alt=media&token=d8d43311-ee20-4687-8c97-9aab3e5a0e0e";
-
-        Glide.with(holder.itemView.getContext()).load(imgUrlEasy).into(holder.);
-        */
-
+        // Устанавливаем слушатель для каждого элемента
+        holder.itemView.setOnClickListener(v -> {
+            if (clickListener != null) {
+                clickListener.onClick(v, position);
+            }
+        });
     }
 
     @Override
@@ -58,4 +58,5 @@ public class ChooseViewAdapter extends RecyclerView.Adapter<ChooseViewHolder> {
         // Возвращает количество элементов в списке
         return typeGameList.size();
     }
+
 }

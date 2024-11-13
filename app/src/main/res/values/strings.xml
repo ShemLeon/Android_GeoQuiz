@@ -10,4 +10,7 @@
     <string name="apply">Apply</string>
     <string name="score">Score: 0</string>
     <string name="score_text">Score: %1$d</string>
+    <string name="final_score_text">CONGRATULATIONS! </string>
+    <string name="your_score_text">Your score is: </string>
+
 </resources>
