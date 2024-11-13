@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
         // проверка на соединение с интернетом
-        checkNetwork();
+        checkNetworkAndProceed();
 
 
         binding.tvToRegister.setOnClickListener(new View.OnClickListener() {
@@ -89,40 +89,37 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void checkNetwork(){
-        // Метод для проверки сети и перехода к нужной активности
-        Thread thread = new Thread(()-> {
-            while (true) {
-                if (!NetworkConnectivityUtil.isInternetAvailable(LoginActivity.this)) {
-                    // Нет интернета: показываем картинку и скрываем элементы
-                    runOnUiThread(() -> {
-                        binding.btnLogin.setVisibility(View.GONE);
-                        binding.etEmail.setVisibility(View.GONE);
-                        binding.etPassword.setVisibility(View.GONE);
-                        binding.tvToRegister.setVisibility(View.GONE);
-                        binding.ivNoInternet.setVisibility(View.VISIBLE);
-                    });
-                } else {
-                    // Интернет есть: скрываем картинку и проверяем аутентификацию
-                    runOnUiThread(() -> {
-                    binding.btnLogin.setVisibility(View.VISIBLE);
-                    binding.etEmail.setVisibility(View.VISIBLE);
-                    binding.etPassword.setVisibility(View.VISIBLE);
-                    binding.tvToRegister.setVisibility(View.VISIBLE);
-                    binding.ivNoInternet.setVisibility(View.GONE);
+    // Метод для проверки сети и перехода к нужной активности
+    private void checkNetworkAndProceed() {
+        if (!NetworkConnectivityUtil.isInternetAvailable(this)) {
+            // Нет интернета: показываем картинку и скрываем элементы
+            binding.btnLogin.setVisibility(View.GONE);
+            binding.etEmail.setVisibility(View.GONE);
+            binding.etPassword.setVisibility(View.GONE);
+            binding.tvToRegister.setVisibility(View.GONE);
+            binding.ivNoInternet.setVisibility(View.VISIBLE);
+        } else {
+            // Интернет есть: скрываем картинку и проверяем аутентификацию
+            binding.btnLogin.setVisibility(View.VISIBLE);
+            binding.etEmail.setVisibility(View.VISIBLE);
+            binding.etPassword.setVisibility(View.VISIBLE);
+            binding.tvToRegister.setVisibility(View.VISIBLE);
+            binding.ivNoInternet.setVisibility(View.GONE);
 
-                        // Проверка или пользователь не был уже залогинен. иначе отправка в в ChooseActivity
-                        if (auth.getCurrentUser() != null) {
-                            Intent intent = new Intent(LoginActivity.this,ChooseActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }
-                    });
-                }
-
+            // Проверяем, был ли пользователь уже аутентифицирован
+            if (auth.getCurrentUser() != null) {
+                // Если пользователь уже аутентифицирован, направляем в ChooseActivity
+                Intent intent = new Intent(LoginActivity.this, ChooseActivity.class);
+                startActivity(intent);
+                finish();
             }
-        });
+        }
+    }
 
-
+    // Регулярная проверка сети через Handler для обновления UI
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkNetworkAndProceed(); // Проверка сети и обновление UI при возврате к активности
     }
 }
