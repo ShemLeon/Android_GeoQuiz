@@ -135,7 +135,12 @@ public class QuizActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()){
                     DataSnapshot snapshot = task.getResult();
-                    processDataSnapshot(snapshot);
+                    if (snapshot.exists()) {
+                        processDataSnapshot(snapshot);
+                    } else {
+                        // Переход к FinishActivity, если вопросов больше нет
+                        finishQuiz();
+                    }
                 } else {
                     throw new RuntimeException(task.getException().getMessage());
                 }
