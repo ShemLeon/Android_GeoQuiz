@@ -34,7 +34,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
 
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -45,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // проверка на соединение с интернетом
         checkNetworkAndProceed();
+
 
 
         binding.tvToRegister.setOnClickListener(new View.OnClickListener() {
@@ -89,37 +89,52 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    // Метод для проверки сети и перехода к нужной активности
-    private void checkNetworkAndProceed() {
-        if (!NetworkConnectivityUtil.isInternetAvailable(this)) {
-            // Нет интернета: показываем картинку и скрываем элементы
-            binding.btnLogin.setVisibility(View.GONE);
-            binding.etEmail.setVisibility(View.GONE);
-            binding.etPassword.setVisibility(View.GONE);
-            binding.tvToRegister.setVisibility(View.GONE);
-            binding.ivNoInternet.setVisibility(View.VISIBLE);
-        } else {
-            // Интернет есть: скрываем картинку и проверяем аутентификацию
-            binding.btnLogin.setVisibility(View.VISIBLE);
-            binding.etEmail.setVisibility(View.VISIBLE);
-            binding.etPassword.setVisibility(View.VISIBLE);
-            binding.tvToRegister.setVisibility(View.VISIBLE);
-            binding.ivNoInternet.setVisibility(View.GONE);
-
-            // Проверяем, был ли пользователь уже аутентифицирован
-            if (auth.getCurrentUser() != null) {
-                // Если пользователь уже аутентифицирован, направляем в ChooseActivity
-                Intent intent = new Intent(LoginActivity.this, ChooseActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        }
-    }
-
-    // Регулярная проверка сети через Handler для обновления UI
     @Override
     protected void onResume() {
         super.onResume();
-        checkNetworkAndProceed(); // Проверка сети и обновление UI при возврате к активности
+        checkNetworkAndProceed();
     }
-}
+
+    // Метод для проверки сети и перехода к нужной активности
+    private void checkNetworkAndProceed() {
+        Thread thread = new Thread(() -> {
+            while (true) {
+                if (!NetworkConnectivityUtil.isInternetAvailable(this)) {
+                    runOnUiThread(() -> {
+                        // Нет интернета: показываем картинку и скрываем элементы
+                        binding.btnLogin.setVisibility(View.GONE);
+                        binding.etEmail.setVisibility(View.GONE);
+                        binding.etPassword.setVisibility(View.GONE);
+                        binding.tvToRegister.setVisibility(View.GONE);
+                        binding.ivNoInternet.setVisibility(View.VISIBLE);
+                    });
+                } else {
+                    runOnUiThread(() -> {
+                        // Интернет есть: скрываем картинку и проверяем аутентификацию
+                        binding.btnLogin.setVisibility(View.VISIBLE);
+                        binding.etEmail.setVisibility(View.VISIBLE);
+                        binding.etPassword.setVisibility(View.VISIBLE);
+                        binding.tvToRegister.setVisibility(View.VISIBLE);
+                        binding.ivNoInternet.setVisibility(View.GONE);
+                        // Проверяем аутентификацию только после восстановления интернет-соединения
+                        if (auth.getCurrentUser() != null) {
+                            Intent intent = new Intent(LoginActivity.this, ChooseActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    });
+                    break;  // Выход из цикла после успешной проверки интернета
+                }
+                try {
+                    Thread.sleep(1000);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        thread.start();
+
+
+        }
+    }
+
