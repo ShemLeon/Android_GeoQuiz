@@ -63,6 +63,13 @@ public class QuizActivity extends AppCompatActivity {
             dbReference = database.getReference("Questions").child("Type_game").child("Hard");
         } else if ("Nightmare".equals(gameType)) {
             dbReference = database.getReference("Questions").child("Type_game").child("Nightmare");
+        } else if ("Clothing".equals(gameType)) {
+            dbReference = database.getReference("Questions").child("Type_game").child("Clothing");
+        } else if ("History".equals(gameType)) {
+            dbReference = database.getReference("Questions").child("Type_game").child("History");
+        } else if ("Sport".equals(gameType)) {
+            dbReference = database.getReference("Questions").child("Type_game").child("Sport");
+
         } else {
             // Обработка случая, если режим не распознан
             Toast.makeText(this, "Неизвестный режим игры", Toast.LENGTH_SHORT).show();
