@@ -21,7 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
-
+import java.util.Random;
 
 
 public class QuizActivity extends AppCompatActivity {
@@ -87,7 +87,7 @@ public class QuizActivity extends AppCompatActivity {
             }
         });
 
-        // Добавляем обработчик для кнопки "Finish"
+        // Обработчик для кнопки "Finish"
         binding.btnFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,7 +95,7 @@ public class QuizActivity extends AppCompatActivity {
             }
         });
 
-        // Добавляем обработчик для кнопки "Hint"
+        // Обработчик для кнопки "Hint"
         binding.btnHint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,6 +103,7 @@ public class QuizActivity extends AppCompatActivity {
             }
         });
     }
+
     private void showHint() {
         dbReference.child(Integer.toString(currentQuestion)).child("hint").get()
                 .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -153,21 +154,32 @@ public class QuizActivity extends AppCompatActivity {
         /**
          * Загрузка и установка контента из фаербейса
          */
-        String pictureUrl = snapshot.child("picture").getValue() != null ? snapshot.child("picture").getValue().toString() : "";
+        String pictureUrl = "";
+        List<String> pictureUrls = new ArrayList<>();
+        for (DataSnapshot pictureSnapShot : snapshot.child("picture").getChildren()) {
+            String url = pictureSnapShot.getValue().toString();
+            pictureUrls.add(url);
+        }
+        if (!pictureUrls.isEmpty()) {
+            int randomIndex = new Random().nextInt(pictureUrls.size());
+            pictureUrl = pictureUrls.get(randomIndex);
+        }
+
         String question = snapshot.child("question").getValue() != null ? snapshot.child("question").getValue().toString() : "";
         currentRightAnswer = snapshot.child("right").getValue() != null ? snapshot.child("right").getValue().toString() : "";
 
         List<String> questionAnswers = new ArrayList<>();
-
-        for (DataSnapshot answerSnapShot: snapshot.child("answers").getChildren()) {
+        for (DataSnapshot answerSnapShot : snapshot.child("answers").getChildren()) {
             String answer = answerSnapShot.getValue().toString();
             questionAnswers.add(answer);
         }
+
         // Glide - фича для преобразования ссылки в картинку на телефон.
         Glide.with(QuizActivity.this).load(pictureUrl).into(binding.ivQuestion);
         binding.tvQuestion.setText(question);
         fillAnswerOptions(questionAnswers);
     }
+
     private void fillAnswerOptions(List<String> answerOptions) {
         // Заполнение XML данными из фаербейса
         if (answerOptions.size() < 6) {
@@ -205,9 +217,9 @@ public class QuizActivity extends AppCompatActivity {
         /*
          * Функция описывает собития после нажатия основной кнопки:
         * 1. Очистка выбора RadioButton
-        * 2. Проверка ответа с правильным
+        * 2. Сравнение ответа с правильным
         * 3. Начисление и отображение баллов в Score
-        * 4. переключение на следующий вопрос
+        * 4. Переключение на следующий вопрос
         */
         // Проверяем, выбран ли вообще какой-то RadioButton
         if (selectedRadioButtonId == -1) {
