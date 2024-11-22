@@ -163,7 +163,7 @@ public class QuizActivity extends AppCompatActivity {
          */
         String pictureUrl = "";
         List<String> pictureUrls = new ArrayList<>();
-        for (DataSnapshot pictureSnapShot : snapshot.child("picture").getChildren()) {
+        for (DataSnapshot pictureSnapShot : snapshot.child("pictures").getChildren()) {
             String url = pictureSnapShot.getValue().toString();
             pictureUrls.add(url);
         }
@@ -183,7 +183,7 @@ public class QuizActivity extends AppCompatActivity {
 
         // Glide - фича для преобразования ссылки в картинку на телефон.
         Glide.with(QuizActivity.this).load(pictureUrl).into(binding.ivQuestion);
-        binding.tvQuestion.setText(question);
+
         fillAnswerOptions(questionAnswers);
     }
 
