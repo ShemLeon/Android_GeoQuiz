@@ -201,14 +201,16 @@ public class QuizActivity extends AppCompatActivity {
         // Перемешиваем индексы случайным образом
         Collections.shuffle(indices);
         // Устанавливаем текст для радиокнопок, используя случайные индексы
-        binding.radioAns1.setText(answerOptions.get(indices.get(0)));
-        binding.radioAns2.setText(answerOptions.get(indices.get(1)));
-        binding.radioAns3.setText(answerOptions.get(indices.get(2)));
-        binding.radioAns4.setText(answerOptions.get(indices.get(3)));
-        binding.radioAns5.setText(answerOptions.get(indices.get(4)));
-        binding.radioAns6.setText(answerOptions.get(indices.get(5)));
+        // Преобразуем текст, чтобы каждое слово начиналось с новой строки
+        binding.radioAns1.setText(answerOptions.get(indices.get(0)).replace(" ", "\n"));
+        binding.radioAns2.setText(answerOptions.get(indices.get(1)).replace(" ", "\n"));
+        binding.radioAns3.setText(answerOptions.get(indices.get(2)).replace(" ", "\n"));
+        binding.radioAns4.setText(answerOptions.get(indices.get(3)).replace(" ", "\n"));
+        binding.radioAns5.setText(answerOptions.get(indices.get(4)).replace(" ", "\n"));
+        binding.radioAns6.setText(answerOptions.get(indices.get(5)).replace(" ", "\n"));
 
     }
+
     private void onRadioButtonClicked(View view) {
         RadioButton radioButton = (RadioButton) view;
         // Снимаем выбор с предыдущего выбранного RadioButton, если он есть
