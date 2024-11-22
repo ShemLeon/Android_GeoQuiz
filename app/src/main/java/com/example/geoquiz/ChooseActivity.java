@@ -45,7 +45,7 @@ public class ChooseActivity extends AppCompatActivity implements TypeGameClickLi
         typeGameList.add(new TypeGame(1,"Easy", R.drawable.card_easy));
         typeGameList.add(new TypeGame(2, "Hard", R.drawable.card_hard));
         typeGameList.add(new TypeGame(3, "Nightmare", R.drawable.card_nigthmare));
-        typeGameList.add(new TypeGame(4, "Сlothing", R.drawable.card_clothing));
+        typeGameList.add(new TypeGame(4, "Clothing", R.drawable.card_clothing));
         typeGameList.add(new TypeGame(5, "History", R.drawable.card_history));
         typeGameList.add(new TypeGame(6, "Sport", R.drawable.card_sport));
 

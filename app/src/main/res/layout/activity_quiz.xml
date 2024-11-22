@@ -36,27 +36,19 @@
         app:layout_constraintTop_toTopOf="@id/tv_score"
         tools:src="@drawable/img" />
 
-    <TextView
-        android:id="@+id/tv_question"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_question"
-        tools:text="Question text" />
+
 
     <androidx.gridlayout.widget.GridLayout
         android:id="@+id/rg_answers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="50dp"
         app:columnCount="2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_question"
+        app:layout_constraintTop_toBottomOf="@+id/iv_question"
+
         app:orientation="horizontal"
         app:rowCount="3">
 
