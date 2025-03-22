@@ -41,6 +41,7 @@ public class RegisterActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         // инициализация аутентификации и БД с Firebase
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();

@@ -37,6 +37,7 @@ public class QuizActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //не смотри
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
 
@@ -47,7 +48,7 @@ public class QuizActivity extends AppCompatActivity {
         // Получение режима игры из Intent
         String gameType = getIntent().getStringExtra("selected_game_type");
 
-
+        //не смотри
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -55,6 +56,7 @@ public class QuizActivity extends AppCompatActivity {
         });
 
         database = FirebaseDatabase.getInstance();
+
         //здесь добавить логику с режимами игры, интент после ChooseActivity
 
         if ("Easy".equals(gameType)) {
@@ -161,6 +163,7 @@ public class QuizActivity extends AppCompatActivity {
         /**
          * Загрузка и установка контента из фаербейса
          */
+        // датаснепшот - запихивает картинку из интернета по урл в твой андроид
         String pictureUrl = "";
         List<String> pictureUrls = new ArrayList<>();
         for (DataSnapshot pictureSnapShot : snapshot.child("pictures").getChildren()) {
@@ -230,11 +233,13 @@ public class QuizActivity extends AppCompatActivity {
         * 3. Начисление и отображение баллов в Score
         * 4. Переключение на следующий вопрос
         */
+
         // Проверяем, выбран ли вообще какой-то RadioButton
         if (selectedRadioButtonId == -1) {
             Toast.makeText(QuizActivity.this, "Firstly choose the answer", Toast.LENGTH_SHORT).show();
             return;
         }
+
         // Получаем текст выбранного RadioButton
         String chosenAnswer = ((RadioButton) findViewById(selectedRadioButtonId)).getText().toString();
 
