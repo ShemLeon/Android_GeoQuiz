@@ -42,9 +42,6 @@ git clone https://github.com/ShemLeon/Android_project.git
 - Teachers
 - Students and educators
 
-## License
-[Specify your project's license]
-
 ## Developers
 - Leonid Shemiakin
 - Yevgeny Nemetshenko
