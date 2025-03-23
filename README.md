@@ -44,7 +44,7 @@ git clone https://github.com/ShemLeon/Android_project.git
 
 ## Developers
 - Leonid Shemiakin
-- Yevgeny Nemetshenko
+- Yevgeny Nemchenko
 
 ## Contacts
 - Email: shemiakinleonid@gmail.com
